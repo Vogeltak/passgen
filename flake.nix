@@ -23,7 +23,7 @@
             pkg-config
             eza
             fd
-            rust-bin.beta.latest.default
+            rust-bin.stable."1.73.0".default
           ];
 
           shellHook = ''
