@@ -1,3 +1,4 @@
+use anyhow::Result;
 use rand::distributions::Uniform;
 use rand::Rng;
 
@@ -8,7 +9,14 @@ const ALPHABET: &[u8] = b"abcdefghijklmnopqrstuvwxyz";
 const ALPHABET_CAPITALIZED: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const SYMBOLS: &[u8] = b" !\"#$%'()*+,-./:;<=>?@[\\]^_`{|}~";
 
-pub fn generate(args: &Args) -> (f64, String) {
+#[derive(Debug, Clone)]
+pub struct Password {
+    pub text: String,
+    pub entropy: f64,
+}
+
+/// Generate a password in conformance with the configuration arguments.
+pub fn generate(args: &Args) -> Result<Password> {
     use crate::cli::PasswordType::*;
     let character_set = match args.password_type {
         Random => {
@@ -40,12 +48,12 @@ pub fn generate(args: &Args) -> (f64, String) {
     // https://en.wikipedia.org/wiki/Password_strength#Random_passwords
     let entropy = args.length as f64 * (character_set.len() as f64).log2() / 2_f64.log2();
 
-    (
-        entropy,
-        (&mut rng)
+    Ok(Password {
+        text: (&mut rng)
             .sample_iter(dist)
             .take(args.length)
             .map(|i| char::from(character_set[i]))
             .collect::<String>(),
-    )
+        entropy,
+    })
 }

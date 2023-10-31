@@ -1,13 +1,16 @@
+use anyhow::Result;
 use clap::Parser;
 
 mod cli;
 mod password;
 
-fn main() {
+fn main() -> Result<()> {
     let args = cli::Args::parse();
 
-    let (entropy, pwd) = password::generate(&args);
+    let pwd = password::generate(&args)?;
 
-    println!("{pwd}");
-    eprintln!("Entropy: {entropy} bits");
+    println!("{}", pwd.text);
+    eprintln!("Entropy: {} bits", pwd.entropy);
+
+    Ok(())
 }
