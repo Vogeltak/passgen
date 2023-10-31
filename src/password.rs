@@ -18,7 +18,7 @@ pub struct Password {
 /// Generate a password in conformance with the configuration arguments.
 pub fn generate(args: &Args) -> Result<Password> {
     use crate::cli::PasswordType::*;
-    let character_set = match args.password_type {
+    let character_set = match args.type_of_password {
         Random => {
             let mut character_set = ALPHABET.to_vec();
             if !args.no_numbers {

@@ -5,8 +5,8 @@ use clap::{Parser, ValueEnum};
 #[command(author, version, about, long_about = None)]
 pub struct Args {
     /// The type of password to generate.
-    #[arg(value_enum, default_value_t = PasswordType::Random)]
-    pub password_type: PasswordType,
+    #[arg(value_enum, short, default_value_t = PasswordType::Random, value_name = "PASSWORD_TYPE")]
+    pub type_of_password: PasswordType,
 
     /// Desired length of the password.
     #[arg(short, long, default_value_t = 16)]
