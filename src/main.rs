@@ -22,6 +22,7 @@ use anyhow::Result;
 use clap::Parser;
 
 mod cli;
+mod diceware;
 mod password;
 
 fn main() -> Result<()> {

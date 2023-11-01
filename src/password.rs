@@ -1,8 +1,10 @@
 use anyhow::Result;
+use itertools::Itertools;
 use rand::distributions::Uniform;
 use rand::Rng;
 
 use crate::cli::Args;
+use crate::diceware::Diceware;
 
 const NUMERALS: &[u8] = b"0123456789";
 const ALPHABET: &[u8] = b"abcdefghijklmnopqrstuvwxyz";
@@ -35,7 +37,12 @@ pub fn generate(args: &Args) -> Result<Password> {
         }
         Pin => NUMERALS.to_vec(),
         Memorable => {
-            todo!()
+            // Entropy per word for a diceware-generate passphrase is 12.9 bits,
+            // see https://en.wikipedia.org/wiki/Diceware
+            return Ok(Password {
+                text: Diceware::new().take(args.length).join("-"),
+                entropy: 12.9 * args.length as f64,
+            });
         }
     };
 
